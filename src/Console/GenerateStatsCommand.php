@@ -48,7 +48,7 @@ class GenerateStatsCommand extends Command
         foreach ($rankedStats as $item) {
             $jsonData['org'][] = [
                 'count' => $item->getCount(),
-                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()->getOrg(),
+                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()?->getOrg(),
             ];
         }
 
@@ -57,7 +57,7 @@ class GenerateStatsCommand extends Command
         foreach ($rankedStats as $item) {
             $jsonData['country'][] = [
                 'count' => $item->getCount(),
-                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()->getCountryName() ?? $item->getAccessLogInfoAggregationModel()->getCountryName(),
+                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()?->getCountryName() ?? $item->getAccessLogInfoAggregationModel()->getCountryName(),
             ];
         }
 

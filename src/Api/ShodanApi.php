@@ -17,7 +17,7 @@ class ShodanApi
     public function getHostInfo(string $ip): ?HostInfoModel
     {
         if (file_exists(self::CACHE_DIR . $ip)) {
-            return new HostInfoModel(json_decode(file_get_contents(self::CACHE_DIR . $ip), true));
+            return $this->createModel(json_decode(file_get_contents(self::CACHE_DIR . $ip), true));
         }
 
         $url = 'https://api.shodan.io/shodan/host/' . $ip . '?key=' . $this->apiKey;
@@ -31,6 +31,15 @@ class ShodanApi
         fwrite($fp, $json);
         fclose($fp);
 
-        return new HostInfoModel(json_decode($json, true));
+        return $this->createModel(json_decode($json, true));
+    }
+
+    private function createModel(array $json): HostInfoModel
+    {
+        return new HostInfoModel(
+            $json['country_name'] ?? null,
+            $json['org'] ?? null,
+            $json['isp'] ?? null,
+        );
     }
 }

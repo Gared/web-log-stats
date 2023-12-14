@@ -5,27 +5,25 @@ namespace Gared\WebLogStats\Api\Model;
 
 class HostInfoModel
 {
-    /**
-     * @param array $data
-     */
-    // @phpstan-ignore-next-line
     public function __construct(
-        private readonly array $data,
+        private readonly ?string $countryName,
+        private readonly ?string $org,
+        private readonly ?string $isp,
     ) {
     }
 
     public function getCountryName(): ?string
     {
-        return $this->data['country_name'] ?? null;
+        return $this->countryName;
     }
 
     public function getOrg(): ?string
     {
-        return $this->data['org'] ?? null;
+        return $this->org;
     }
 
     public function getIsp(): ?string
     {
-        return $this->data['isp'] ?? null;
+        return $this->isp;
     }
 }
