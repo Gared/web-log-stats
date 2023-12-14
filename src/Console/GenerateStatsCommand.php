@@ -33,7 +33,10 @@ class GenerateStatsCommand extends Command
             $input->getOption('dbip'),
             $input->getOption('shodan-api-key'),
         );
+        $output->writeln('Collecting data...');
         $data = $collectDataService->collect($input->getOption('log-file'));
+
+        $output->writeln('Generating stats...');
 
         $grouper = new GroupService();
         $ranking = new RankService();
@@ -54,7 +57,7 @@ class GenerateStatsCommand extends Command
         foreach ($rankedStats as $item) {
             $jsonData['country'][] = [
                 'count' => $item->getCount(),
-                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()->getCountryName(),
+                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()->getCountryName() ?? $item->getAccessLogInfoAggregationModel()->getCountryName(),
             ];
         }
 
@@ -66,6 +69,8 @@ class GenerateStatsCommand extends Command
                 'name' => $item->getAccessLogInfoAggregationModel()->getLineModel()->getUserAgent(),
             ];
         }
+
+        $output->writeln('Writing stats...');
 
         $writer = new JsonWriter();
         $writer->write($input->getOption('stats-file'), $jsonData);
