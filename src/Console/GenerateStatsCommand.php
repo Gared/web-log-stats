@@ -49,7 +49,7 @@ class GenerateStatsCommand extends Command
         $jsonData = [];
 
         $stats = $grouper->groupByOrg($data);
-        $rankedStats = $ranking->rank($stats);
+        $rankedStats = $ranking->rank($stats, 10);
         foreach ($rankedStats as $item) {
             $jsonData['org'][] = [
                 'count' => $item->getCount(),
@@ -58,7 +58,7 @@ class GenerateStatsCommand extends Command
         }
 
         $stats = $grouper->groupByCountry($data);
-        $rankedStats = $ranking->rank($stats);
+        $rankedStats = $ranking->rank($stats, 10);
         foreach ($rankedStats as $item) {
             $jsonData['country'][] = [
                 'count' => $item->getCount(),
@@ -67,7 +67,7 @@ class GenerateStatsCommand extends Command
         }
 
         $stats = $grouper->groupByUserAgent($data);
-        $rankedStats = $ranking->rank($stats);
+        $rankedStats = $ranking->rank($stats, 5);
         foreach ($rankedStats as $item) {
             $jsonData['user_agent'][] = [
                 'count' => $item->getCount(),

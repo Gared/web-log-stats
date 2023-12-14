@@ -52,7 +52,7 @@ class GroupService
     {
         $result = [];
         foreach ($this->group($data) as $item) {
-            $key = $item->getHostInfo()?->getCountryName();
+            $key = $item->getHostInfo()?->getCountryName() ?? $item->getCountryName();
             if (array_key_exists($key, $result)) {
                 $result[$key]->incrementCount();
             } else {
