@@ -1,0 +1,10 @@
+*.log
+*.json
+*.mmdb
+
+!composer.json
+
+composer.phar
+
+.idea/
+vendor/

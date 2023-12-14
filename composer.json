@@ -1,0 +1,17 @@
+{
+  "name": "gared/web-log-stats",
+  "autoload": {
+    "psr-4" : {
+      "Gared\\WebLogStats\\" : "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.1",
+    "ext-json": "*",
+    "symfony/console": "^6.4",
+    "geoip2/geoip2": "~2.0"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.10"
+  }
+}
