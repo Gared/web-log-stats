@@ -9,6 +9,7 @@ use Gared\WebLogStats\Service\RankService;
 use Gared\WebLogStats\Writer\JsonWriter;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,8 +34,12 @@ class GenerateStatsCommand extends Command
             $input->getOption('dbip'),
             $input->getOption('shodan-api-key'),
         );
+
+        $progressBar = new ProgressBar($output);
+        $progressBar->setFormat('%current%/%max% [%bar%] %percent:3s%% %elapsed:16s%/%estimated:-16s% %memory:6s%');
+
         $output->writeln('Collecting data...');
-        $data = $collectDataService->collect($input->getOption('log-file'));
+        $data = $collectDataService->collect($input->getOption('log-file'), $progressBar);
 
         $output->writeln('Generating stats...');
 
