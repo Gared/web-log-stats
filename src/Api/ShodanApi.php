@@ -28,13 +28,16 @@ class ShodanApi
         }
 
         if (file_exists(self::CACHE_DIR . $ip)) {
-            return $this->createModel($ip, json_decode(file_get_contents(self::CACHE_DIR . $ip), true));
+            $content = file_get_contents(self::CACHE_DIR . $ip);
+            if ($content !== '' && $content !== false && $content !== 'null') {
+                return $this->createModel($ip, json_decode($content, true));
+            }
         }
 
         $url = 'https://api.shodan.io/shodan/host/' . $ip . '?key=' . $this->apiKey;
         $json = @file_get_contents($url);
 
-        if ($json === false) {
+        if ($json === false || $json === null) {
             $this->unknownIpCache[$ip] = null;
             return null;
         }
