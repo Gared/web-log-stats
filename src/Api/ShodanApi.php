@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Gared\WebLogStats\Api;
 
 use Gared\WebLogStats\Api\Model\HostInfoModel;
+use JsonException;
 
 class ShodanApi
 {
@@ -29,8 +30,11 @@ class ShodanApi
 
         if (file_exists(self::CACHE_DIR . $ip)) {
             $content = file_get_contents(self::CACHE_DIR . $ip);
-            if ($content !== '' && $content !== false && $content !== 'null') {
-                return $this->createModel($ip, json_decode($content, true));
+            try {
+                return $this->createModel($ip, json_decode($content, true, 512, JSON_THROW_ON_ERROR));
+            } catch (JsonException $e) {
+                var_dump($e->getMessage());
+                return null;
             }
         }
 
@@ -46,7 +50,7 @@ class ShodanApi
         fwrite($fp, $json);
         fclose($fp);
 
-        return $this->createModel($ip, json_decode($json, true));
+        return $this->createModel($ip, json_decode($json, true, 512, JSON_THROW_ON_ERROR));
     }
 
     private function createModel(string $ip, array $json): HostInfoModel
