@@ -1,5 +1,7 @@
 {
   "name": "gared/web-log-stats",
+  "description": "A simple CLI tool to parse web server logs and generate statistics",
+  "license": "Apache-2.0",
   "autoload": {
     "psr-4" : {
       "Gared\\WebLogStats\\" : "src/"
