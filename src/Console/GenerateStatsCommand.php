@@ -79,7 +79,7 @@ class GenerateStatsCommand extends Command
         }
 
         $stats = $grouper->groupByUserAgent($data);
-        $rankedStats = $ranking->rank($stats, 5);
+        $rankedStats = $ranking->rank($stats, 6);
         foreach ($rankedStats as $item) {
             $jsonData['user_agent'][] = [
                 'count' => $item->getCount(),

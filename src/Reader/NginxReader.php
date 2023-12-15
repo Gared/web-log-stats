@@ -13,20 +13,30 @@ class NginxReader
      */
     public function readLogFile(string $path): array
     {
-        $handle = fopen($path, 'r');
-        if ($handle === false) {
-            throw new RuntimeException('Cannot open file: ' . $path);
-        }
-
         $data = [];
 
-        $line = fgets($handle);
-        while ($line !== false) {
-            $data[] = $this->readLine($line);
-            $line = fgets($handle);
+        $logfiles = glob($path);
+        if (count($logfiles) === 0) {
+            throw new RuntimeException('No log files found in path: ' . $path);
         }
 
-        fclose($handle);
+        foreach ($logfiles as $logfile) {
+            $isGzip = str_ends_with($logfile, '.gz');
+
+            $handle = $isGzip ? gzopen($logfile, 'r') : fopen($logfile, 'r');
+            if ($handle === false) {
+                throw new RuntimeException('Cannot open file: ' . $logfile);
+            }
+
+            $line = fgets($handle);
+            while ($line !== false) {
+                $info = $this->readLine($line);
+                $data[] = $info;
+                $line = fgets($handle);
+            }
+
+            $isGzip ? gzclose($handle) : fclose($handle);
+        }
 
         return $data;
     }
