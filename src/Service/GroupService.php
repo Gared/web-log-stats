@@ -10,29 +10,12 @@ class GroupService
 {
     /**
      * @param AccessLogInfoAggregationModel[] $data
-     * @return AccessLogInfoAggregationModel[]
-     */
-    public function group(array $data): array
-    {
-        $result = [];
-        foreach ($data as $item) {
-            $key = $item->getLineModel()->getIp() . '-' . $item->getLineModel()->getUserAgent();
-            if (array_key_exists($key, $result) === false) {
-                $result[$key] = $item;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param AccessLogInfoAggregationModel[] $data
      * @return StatsModel[]
      */
     public function groupByUserAgent(array $data): array
     {
         $result = [];
-        foreach ($this->group($data) as $item) {
+        foreach ($data as $item) {
             $key = $item->getLineModel()->getUserAgent();
             if (array_key_exists($key, $result)) {
                 $result[$key]->incrementCount();
@@ -51,7 +34,7 @@ class GroupService
     public function groupByCountry(array $data): array
     {
         $result = [];
-        foreach ($this->group($data) as $item) {
+        foreach ($data as $item) {
             $key = $item->getHostInfo()?->getCountryName() ?? $item->getCountryName();
             if (array_key_exists($key, $result)) {
                 $result[$key]->incrementCount();
@@ -70,7 +53,7 @@ class GroupService
     public function groupByOrg(array $data): array
     {
         $result = [];
-        foreach ($this->group($data) as $item) {
+        foreach ($data as $item) {
             $key = $item->getHostInfo()?->getOrg();
             if (array_key_exists($key, $result)) {
                 $result[$key]->incrementCount();
@@ -89,7 +72,7 @@ class GroupService
     public function groupByIsp(array $data): array
     {
         $result = [];
-        foreach ($this->group($data) as $item) {
+        foreach ($data as $item) {
             $key = $item->getHostInfo()?->getIsp();
             if (array_key_exists($key, $result)) {
                 $result[$key]->incrementCount();

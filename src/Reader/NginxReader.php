@@ -31,7 +31,7 @@ class NginxReader
             $line = fgets($handle);
             while ($line !== false) {
                 $info = $this->readLine($line);
-                $data[] = $info;
+                $data[$info->getIp().'-'.$info->getUserAgent()] = $info;
                 $line = fgets($handle);
             }
 
