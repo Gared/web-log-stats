@@ -12,7 +12,7 @@ class GroupService
      * @param AccessLogInfoAggregationModel[] $data
      * @return AccessLogInfoAggregationModel[]
      */
-    private function group(array $data): array
+    public function group(array $data): array
     {
         $result = [];
         foreach ($data as $item) {

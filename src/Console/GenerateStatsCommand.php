@@ -48,6 +48,9 @@ class GenerateStatsCommand extends Command
 
         $jsonData = [];
 
+        $groupedClients = $grouper->group($data);
+        $jsonData['clients']['count'] = count($groupedClients);
+
         $stats = $grouper->groupByOrg($data);
         $rankedStats = $ranking->rank($stats, 10);
         foreach ($rankedStats as $item) {
