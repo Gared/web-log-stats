@@ -57,6 +57,15 @@ class GenerateStatsCommand extends Command
             ];
         }
 
+        $stats = $grouper->groupByIsp($data);
+        $rankedStats = $ranking->rank($stats, 10);
+        foreach ($rankedStats as $item) {
+            $jsonData['isp'][] = [
+                'count' => $item->getCount(),
+                'name' => $item->getAccessLogInfoAggregationModel()->getHostInfo()?->getIsp(),
+            ];
+        }
+
         $stats = $grouper->groupByCountry($data);
         $rankedStats = $ranking->rank($stats, 10);
         foreach ($rankedStats as $item) {

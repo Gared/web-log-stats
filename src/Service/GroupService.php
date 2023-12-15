@@ -62,6 +62,7 @@ class GroupService
 
         return $result;
     }
+
     /**
      * @param AccessLogInfoAggregationModel[] $data
      * @return StatsModel[]
@@ -81,4 +82,22 @@ class GroupService
         return $result;
     }
 
+    /**
+     * @param AccessLogInfoAggregationModel[] $data
+     * @return StatsModel[]
+     */
+    public function groupByIsp(array $data): array
+    {
+        $result = [];
+        foreach ($this->group($data) as $item) {
+            $key = $item->getHostInfo()?->getIsp();
+            if (array_key_exists($key, $result)) {
+                $result[$key]->incrementCount();
+            } else {
+                $result[$key] = new StatsModel($item);
+            }
+        }
+
+        return $result;
+    }
 }
