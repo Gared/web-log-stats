@@ -25,6 +25,7 @@ class GenerateStatsCommand extends Command
         $this->addOption('log-file', 'l', InputOption::VALUE_REQUIRED, 'Path to log file');
         $this->addOption('stats-file', 's', InputOption::VALUE_REQUIRED, 'Path to stats output file');
         $this->addOption('shodan-api-key', null, InputOption::VALUE_REQUIRED, 'Shodan api key');
+        $this->addOption('github-api-key', null, InputOption::VALUE_REQUIRED, 'Github api key');
         $this->addOption('dbip', null, InputOption::VALUE_REQUIRED, 'Dbip database file');
     }
 
@@ -33,6 +34,7 @@ class GenerateStatsCommand extends Command
         $collectDataService = new CollectDataService(
             $input->getOption('dbip'),
             $input->getOption('shodan-api-key'),
+            $input->getOption('github-api-key'),
         );
 
         $progressBar = new ProgressBar($output);

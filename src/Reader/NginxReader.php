@@ -5,13 +5,16 @@ namespace Gared\WebLogStats\Reader;
 
 use Gared\WebLogStats\Model\AccessLogLineModel;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\IpUtils;
 
 class NginxReader
 {
+    private array $ipIgnoreCache = [];
+
     /**
      * @return AccessLogLineModel[]
      */
-    public function readLogFile(string $path): array
+    public function readLogFile(string $path, ?array $ignoredIpRanges): array
     {
         $data = [];
 
@@ -31,7 +34,12 @@ class NginxReader
             $line = fgets($handle);
             while ($line !== false) {
                 $info = $this->readLine($line);
-                $data[$info->getIp().'-'.$info->getUserAgent()] = $info;
+
+                $isInRange = $this->ignoreIpRange($info->getIp(), $ignoredIpRanges);
+                if ($isInRange === false) {
+                    $data[$info->getIp().'-'.$info->getUserAgent()] = $info;
+                }
+
                 $line = fgets($handle);
             }
 
@@ -39,6 +47,22 @@ class NginxReader
         }
 
         return $data;
+    }
+
+    private function ignoreIpRange(string $ip, ?array $ignoredIpRanges): bool
+    {
+        if ($ignoredIpRanges === null) {
+            return false;
+        }
+
+        if (array_key_exists($ip, $this->ipIgnoreCache)) {
+            return $this->ipIgnoreCache[$ip];
+        }
+
+        $isInRange = IpUtils::checkIp($ip, $ignoredIpRanges);
+        $this->ipIgnoreCache[$ip] = $isInRange;
+
+        return $isInRange;
     }
 
     private function readLine(string $line): AccessLogLineModel
