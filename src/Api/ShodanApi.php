@@ -122,7 +122,7 @@ class ShodanApi
         $wait = self::REQUEST_INTERVAL_SECONDS - $elapsed;
 
         if ($wait > 0) {
-            $actualWait = (int)($wait * 1_000_000);
+            $actualWait = (int)($wait * 1_000_000) + 200_000;
             usleep($actualWait);
         }
     }
