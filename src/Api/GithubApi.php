@@ -15,7 +15,7 @@ class GithubApi
 {
     private Client $client;
 
-    public function __construct(string $token)
+    public function __construct()
     {
         $stack = new HandlerStack(Utils::chooseHandler());
         $stack->push(Middleware::httpErrors(new BodySummarizer(1000)), 'http_errors');
@@ -23,7 +23,6 @@ class GithubApi
         $this->client = new Client([
             'base_uri' => 'https://api.github.com/',
             RequestOptions::HEADERS => [
-                'Authorization' => 'Bearer ' . $token,
                 'User-Agent' => 'Gared (project: web-log-stats)',
             ],
             'handler' => $stack,

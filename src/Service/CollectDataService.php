@@ -17,7 +17,7 @@ class CollectDataService
     private ?ShodanApi $shodanApi = null;
     private ?GithubApi $githubApi = null;
 
-    public function __construct(string $pathIpDatabase, ?string $shodanApiKey, ?string $githubApiKey)
+    public function __construct(string $pathIpDatabase, ?string $shodanApiKey)
     {
         $this->nginxReader = new NginxReader();
         $this->ipDatabaseReader = new Reader($pathIpDatabase);
@@ -25,9 +25,7 @@ class CollectDataService
             $this->shodanApi = new ShodanApi($shodanApiKey);
         }
 
-        if ($githubApiKey !== null) {
-            $this->githubApi = new GithubApi($githubApiKey);
-        }
+        $this->githubApi = new GithubApi();
     }
 
     /**
