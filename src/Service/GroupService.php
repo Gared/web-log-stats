@@ -73,7 +73,7 @@ class GroupService
     {
         $result = [];
         foreach ($data as $item) {
-            $key = $item->getHostInfo()?->getIsp();
+            $key = $item->getHostInfo()?->getIsp() ?? $item->getHostInfo()?->getOrg();
             if (array_key_exists($key, $result)) {
                 $result[$key]->incrementCount();
             } else {
